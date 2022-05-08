@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -16,11 +17,17 @@ class ProductController extends Controller
         $this->product = $product;
     }
 
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(Request $request): ProductCollection
     {
-        $products = $this->product->all();
+        $products = $this->product;
 
-        return response()->json($products);
+        if($request->has('fields'))
+            $products = $products->selectRaw($request->fields);
+
+
+
+//        return response()->json($products);
+        return new ProductCollection($products->paginate(10));
     }
 
     public function show($id): ProductResource
