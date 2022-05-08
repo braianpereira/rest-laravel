@@ -29,4 +29,4 @@ Route::prefix('products')->group(function (){
     Route::delete('/{id}',  [ProductController::class, 'remove']);
 });
 
-
+Route::apiResource('/users', \App\Http\Controllers\Api\UserController::class);
